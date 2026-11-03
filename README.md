@@ -65,6 +65,8 @@ Hệ thống lưu trữ tài khoản phía server tại `src/data/users.json` v�
 
 ### 3.1. Nhật ký kết quả thực thi lệnh `npm run build`
 
+![Kết quả thực thi lệnh npm run build](./public/images/build-result.jpg)
+
 ```text
 Route (app)                                 Revalidate  Expire
 ┌ ○ /

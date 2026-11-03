@@ -1,0 +1,43 @@
+[
+  {
+    "id": "sub-1",
+    "code": "INT1434",
+    "name": "Lập trình Web Nâng Cao",
+    "slug": "lap-trinh-web-nang-cao",
+    "credits": 3,
+    "instructor": "TS. Nguyễn Mạnh Hùng",
+    "description": "Nghiên cứu kiến trúc Next.js App Router, SSR, SSG, ISR, NextAuth, Server Actions và tối ưu hóa SEO.",
+    "color": "#3B82F6"
+  },
+  {
+    "id": "sub-2",
+    "code": "INT1416",
+    "name": "An toàn thông tin mạng",
+    "slug": "an-toan-thong-tin",
+    "credits": 3,
+    "instructor": "PGS. TS. Hoàng Đăng Hải",
+    "description": "Các kỹ thuật mã hóa, xác thực đa yếu tố, phòng thủ tấn công mạng và an ninh ứng dụng web.",
+    "color": "#EF4444"
+  },
+  {
+    "id": "sub-3",
+    "code": "INT1449",
+    "name": "Kiến trúc phần mềm",
+    "slug": "kien-truc-phan-mem",
+    "credits": 3,
+    "instructor": "TS. Vũ Hoài Nam",
+    "description": "Các mẫu thiết kế Microservices, Clean Architecture, CQRS, Event-Driven và thiết kế hệ thống lớn.",
+    "color": "#10B981"
+  },
+  {
+    "id": "sub-4",
+    "code": "INT1340",
+    "name": "Trí tuệ nhân tạo",
+    "slug": "tri-tue-nhan-tao",
+    "credits": 3,
+    "instructor": "TS. Đặng Hoài Bắc",
+    "description": "Các giải thuật tìm kiếm, mạng nơ-ron nhân tạo, học máy có giám sát và xử lý ngôn ngữ tự nhiên.",
+    "color": "#8B5CF6"
+  }
+]
+

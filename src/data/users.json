@@ -1,0 +1,18 @@
+[
+  {
+    "id": "user-admin-1",
+    "name": "Nguyễn Văn An",
+    "email": "admin@ptit.edu.vn",
+    "password": "$2a$10$m0K8G7vI4oE39R2lX4bVOO7Vb6LrqfQdEa1iXb.c9V1JkX6y3b8zO",
+    "rawPassword": "admin123",
+    "role": "admin"
+  },
+  {
+    "id": "user-sv-1",
+    "name": "Trần Thị Bình",
+    "email": "sv@ptit.edu.vn",
+    "password": "$2a$10$Q7eYqX6/xR3.wVzK8tP0EOl8k9gHf8P5y8HjJ4K5L2B0M1N2P3Q4R",
+    "rawPassword": "sv123456",
+    "role": "user"
+  }
+]

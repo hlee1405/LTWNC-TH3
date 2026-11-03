@@ -28,7 +28,8 @@ export default function AddDeadlineModal({ subjects }: AddDeadlineModalProps) {
       setTimeout(() => {
         setIsOpen(false);
         setResult(null);
-      }, 1200);
+        window.location.reload();
+      }, 800);
     }
   };
 
@@ -213,13 +214,12 @@ export default function AddDeadlineModal({ subjects }: AddDeadlineModalProps) {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="description">
-                  Mô tả chi tiết yêu cầu *
+                  Mô tả chi tiết yêu cầu
                 </label>
                 <textarea
                   id="description"
                   name="description"
                   rows={4}
-                  required
                   placeholder="Mô tả các yêu cầu kỹ thuật, cách thức nộp..."
                   className="form-textarea"
                 />

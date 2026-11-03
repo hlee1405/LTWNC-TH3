@@ -39,26 +39,59 @@ export async function getSubjectBySlug(slug: string): Promise<Subject | null> {
 
 // --- DEADLINES ---
 export async function getDeadlines(): Promise<Deadline[]> {
+  let list: Deadline[] = [];
+
   if (memoryDeadlines) {
-    return memoryDeadlines;
+    list = [...memoryDeadlines];
+  } else {
+    // 1. Thử đọc từ /tmp (nếu đã từng được ghi trên Vercel Serverless)
+    let loaded = false;
+    try {
+      const raw = await fs.readFile(TMP_DEADLINES_FILE, 'utf-8');
+      list = JSON.parse(raw);
+      memoryDeadlines = list;
+      loaded = true;
+    } catch {}
+
+    if (!loaded) {
+      // 2. Thử đọc từ src/data
+      try {
+        const raw = await fs.readFile(DEADLINES_FILE, 'utf-8');
+        list = JSON.parse(raw);
+        memoryDeadlines = list;
+      } catch (error) {
+        list = [...(defaultDeadlines as Deadline[])];
+        memoryDeadlines = list;
+      }
+    }
   }
 
-  // 1. Thử đọc từ /tmp (nếu đã từng được ghi trên Vercel Serverless)
+  // 3. Đồng bộ cookie nếu có (xử lý serverless đa container trên Vercel)
   try {
-    const raw = await fs.readFile(TMP_DEADLINES_FILE, 'utf-8');
-    memoryDeadlines = JSON.parse(raw);
-    return memoryDeadlines!;
-  } catch {}
+    const { cookies } = await import('next/headers');
+    const cookieStore = await cookies();
+    const customCookie = cookieStore.get('custom_deadlines')?.value;
+    const deletedCookie = cookieStore.get('deleted_deadlines')?.value;
 
-  // 2. Thử đọc từ src/data
-  try {
-    const raw = await fs.readFile(DEADLINES_FILE, 'utf-8');
-    memoryDeadlines = JSON.parse(raw);
-    return memoryDeadlines!;
-  } catch (error) {
-    memoryDeadlines = defaultDeadlines as Deadline[];
-    return memoryDeadlines;
+    const deletedIds: string[] = deletedCookie ? JSON.parse(deletedCookie) : [];
+    const customDeadlines: Deadline[] = customCookie ? JSON.parse(customCookie) : [];
+
+    if (deletedIds.length > 0) {
+      list = list.filter((d) => !deletedIds.includes(String(d.id)));
+    }
+
+    if (customDeadlines.length > 0) {
+      for (const cd of customDeadlines) {
+        if (!list.some((d) => String(d.id) === String(cd.id))) {
+          list.push(cd);
+        }
+      }
+    }
+  } catch {
+    // Bỏ qua an toàn khi chạy trong build tĩnh SSG
   }
+
+  return list;
 }
 
 export async function getDeadlineById(id: string): Promise<Deadline | null> {

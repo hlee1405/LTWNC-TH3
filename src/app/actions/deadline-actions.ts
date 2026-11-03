@@ -4,6 +4,7 @@ import { auth } from '@/lib/auth';
 import { can } from '@/lib/permissions';
 import { createDeadline, deleteDeadline, toggleUserDeadline, getSubjects } from '@/lib/data';
 import { revalidatePath } from 'next/cache';
+import { cookies } from 'next/headers';
 import type { Role } from '@/types/deadline';
 
 export interface ActionState {
@@ -33,7 +34,7 @@ export async function createDeadlineAction(
   const title = (formData.get('title') as string)?.trim();
   const subjectSlug = (formData.get('subjectSlug') as string)?.trim();
   const dueDate = (formData.get('dueDate') as string)?.trim();
-  const description = (formData.get('description') as string)?.trim();
+  const description = (formData.get('description') as string)?.trim() || 'Không có mô tả chi tiết.';
   const format = (formData.get('format') as string)?.trim() || 'Nộp trực tuyến';
   const weight = (formData.get('weight') as string)?.trim() || '10%';
   const priority = (formData.get('priority') as 'high' | 'medium' | 'low') || 'medium';
@@ -52,10 +53,6 @@ export async function createDeadlineAction(
     return { success: false, error: 'Thời hạn nộp bài (Due date) không hợp lệ.' };
   }
 
-  if (!description || description.length < 5) {
-    return { success: false, error: 'Mô tả bài tập phải có ít nhất 5 ký tự.' };
-  }
-
   try {
     const newDeadline = await createDeadline({
       title,
@@ -68,6 +65,21 @@ export async function createDeadlineAction(
       weight,
       priority,
     });
+
+    // Đồng bộ vào cookie để các Vercel serverless lambda khác đều thấy ngay lập tức
+    try {
+      const cookieStore = await cookies();
+      const existingCookie = cookieStore.get('custom_deadlines')?.value;
+      const customList = existingCookie ? JSON.parse(existingCookie) : [];
+      customList.push(newDeadline);
+      cookieStore.set('custom_deadlines', JSON.stringify(customList), {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 30,
+        sameSite: 'lax',
+      });
+    } catch (e) {
+      console.warn('Could not set custom_deadlines cookie:', e);
+    }
 
     // Revalidate On-Demand theo yêu cầu: làm mới ngay lập tức
     revalidatePath('/deadlines');
@@ -106,6 +118,32 @@ export async function deleteDeadlineAction(deadlineId: string): Promise<ActionSt
     const deleted = await deleteDeadline(deadlineId);
     if (!deleted) {
       return { success: false, error: 'Không tìm thấy deadline cần xoá.' };
+    }
+
+    // Cập nhật cookie đồng bộ các lambda
+    try {
+      const cookieStore = await cookies();
+      const customCookie = cookieStore.get('custom_deadlines')?.value;
+      if (customCookie) {
+        const filtered = JSON.parse(customCookie).filter((d: { id: string }) => String(d.id) !== String(deadlineId));
+        cookieStore.set('custom_deadlines', JSON.stringify(filtered), {
+          path: '/',
+          maxAge: 60 * 60 * 24 * 30,
+          sameSite: 'lax',
+        });
+      }
+      const deletedCookie = cookieStore.get('deleted_deadlines')?.value;
+      const deletedList: string[] = deletedCookie ? JSON.parse(deletedCookie) : [];
+      if (!deletedList.includes(String(deadlineId))) {
+        deletedList.push(String(deadlineId));
+      }
+      cookieStore.set('deleted_deadlines', JSON.stringify(deletedList), {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 30,
+        sameSite: 'lax',
+      });
+    } catch (e) {
+      console.warn('Could not update deleted_deadlines cookie:', e);
     }
 
     // Revalidate các trang liên quan để cập nhật dữ liệu ngay lập tức

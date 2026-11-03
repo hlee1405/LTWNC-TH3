@@ -1,6 +1,10 @@
 import fs from 'fs/promises';
 import path from 'path';
 import type { Subject, Deadline, UserAccount } from '@/types/deadline';
+import defaultSubjects from '@/data/subjects.json';
+import defaultDeadlines from '@/data/deadlines.json';
+import defaultUsers from '@/data/users.json';
+import defaultCompletions from '@/data/user-completions.json';
 
 const DATA_DIR = path.join(process.cwd(), 'src', 'data');
 const SUBJECTS_FILE = path.join(DATA_DIR, 'subjects.json');
@@ -14,8 +18,7 @@ export async function getSubjects(): Promise<Subject[]> {
     const raw = await fs.readFile(SUBJECTS_FILE, 'utf-8');
     return JSON.parse(raw);
   } catch (error) {
-    console.error('Error reading subjects.json:', error);
-    return [];
+    return defaultSubjects as Subject[];
   }
 }
 
@@ -30,8 +33,7 @@ export async function getDeadlines(): Promise<Deadline[]> {
     const raw = await fs.readFile(DEADLINES_FILE, 'utf-8');
     return JSON.parse(raw);
   } catch (error) {
-    console.error('Error reading deadlines.json:', error);
-    return [];
+    return defaultDeadlines as Deadline[];
   }
 }
 
@@ -94,8 +96,7 @@ export async function getUsers(): Promise<UserAccount[]> {
     const raw = await fs.readFile(USERS_FILE, 'utf-8');
     return JSON.parse(raw);
   } catch (error) {
-    console.error('Error reading users.json:', error);
-    return [];
+    return defaultUsers as UserAccount[];
   }
 }
 
@@ -110,7 +111,7 @@ async function getAllCompletions(): Promise<Record<string, string[]>> {
     const raw = await fs.readFile(COMPLETIONS_FILE, 'utf-8');
     return JSON.parse(raw);
   } catch {
-    return {};
+    return (defaultCompletions as Record<string, string[]>) || {};
   }
 }
 

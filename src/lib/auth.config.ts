@@ -2,6 +2,8 @@ import type { NextAuthConfig } from "next-auth";
 import type { Role } from "@/types/deadline";
 
 export const authConfig = {
+  trustHost: true,
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "class-deadline-hub-super-secret-key-32-chars-ptit-2026",
   pages: {
     signIn: "/login",
     error: "/login",

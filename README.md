@@ -67,38 +67,6 @@ Hệ thống lưu trữ tài khoản phía server tại `src/data/users.json` v�
 
 ![Kết quả thực thi lệnh npm run build](./public/images/build-result.jpg)
 
-```text
-Route (app)                                 Revalidate  Expire
-┌ ○ /
-├ ○ /_not-found
-├ ○ /403
-├ ƒ /admin
-├ ƒ /api/auth/[...nextauth]
-├ ƒ /api/user-completions
-├ ƒ /dashboard
-├ ○ /deadlines                                      1m      1y
-├   /deadlines/[id]
-│ ├ ● /deadlines/1
-│ ├ ● /deadlines/2
-│ ├ ● /deadlines/3
-│ └ ● [+9 more paths]
-├ ƒ /deadlines/[id]/opengraph-image-104vc5
-├ ○ /login
-├ ○ /robots.txt
-├ ○ /sitemap.xml
-└   /subjects/[slug]
-  ├ ● /subjects/lap-trinh-web-nang-cao
-  ├ ● /subjects/an-toan-thong-tin
-  ├ ● /subjects/kien-truc-phan-mem
-  └ ● /subjects/tri-tue-nhan-tao
-
-ƒ Proxy (Middleware)
-
-○  (Static)   prerendered as static content
-●  (SSG)      prerendered as static HTML (uses generateStaticParams)
-ƒ  (Dynamic)  server-rendered on demand
-```
-
 ### 3.2. Bảng phân tích chi tiết lý do chọn chiến lược rendering cho từng Route
 
 | Tuyến đường (Route) | Quyền truy cập | Chiến lược áp dụng | Ký hiệu Build | Lý do kỹ thuật & Cơ sở lựa chọn |

@@ -1,18 +1,5 @@
 [
   {
-    "id": "1",
-    "title": "Báo cáo Thực hành Buổi 7: App Router & Rendering Strategies",
-    "subjectSlug": "lap-trinh-web-nang-cao",
-    "subjectName": "Lập trình Web Nâng Cao",
-    "subjectCode": "INT1434",
-    "dueDate": "2026-11-08T23:59:00+07:00",
-    "assignedDate": "2026-10-25T08:00:00+07:00",
-    "description": "Xây dựng ứng dụng hoàn chỉnh sử dụng SSG, ISR, SSR trong Next.js App Router. Viết tài liệu giải thích chi tiết lý do lựa chọn chiến lược render cho từng tuyến đường.",
-    "format": "Kho mã nguồn GitHub + File báo cáo PDF",
-    "weight": "15%",
-    "priority": "high"
-  },
-  {
     "id": "2",
     "title": "Đồ án Giữa kỳ: Xác thực NextAuth & Tối ưu SEO",
     "subjectSlug": "lap-trinh-web-nang-cao",
@@ -156,4 +143,3 @@
     "priority": "low"
   }
 ]
-
